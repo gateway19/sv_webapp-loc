@@ -18,7 +18,7 @@ class User(BaseModel):
 class AuthenticationSettings(BaseModel):
     secret: str = "secret-key"
     jwt_algorithm: str = "HS256"
-    expiration_seconds: int = 3600  # 1 hour
+    expiration_seconds: int = 60  # 1 hour
 
 
 __all__ = ["User", "AuthenticationSettings"]

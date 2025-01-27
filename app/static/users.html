@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список на отчисление</title>
+</head>
+<body>
+    <header>
+        <h1>багнутый сервис</h1>
+        <a href="account.html">Личный кабинет</a>
+    </header>
+    <div id="list" class="list">
+    </div>
+</body>
+<script>
+    if(sessionStorage.getItem("token") == null){
+        window.location.href = "login";}
+    let list = document.getElementById("list");
+    GetUsers();
+
+    async function GetUsers() {
+
+        let promise = await fetch("/users", {
+            headers :  { "Authorization" : sessionStorage.getItem("token")}
+        })
+        let users = await promise.json();
+        users.users.forEach(u => {
+            let div = document.createElement("div");
+            div.className = "user";
+            div.innerHTML =`
+                <span class="initials">${u.surname}</span> :
+                <span class="group">${u.group}</span>
+            `
+            list.append(div);
+        });
+    }
+
+</script>
+<style>
+    header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+    a {
+        border: 1px solid black;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    a:hover {
+        background-color: gray;
+    }
+
+    .list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+    }
+
+    .user {
+        border: 1px solid black;
+        font-size: large;
+        padding-inline:  100px;
+        padding-block: 20px;
+        border-radius: 10px;
+    }
+
+    .user:hover {
+        background-color: rgb(0, 191, 255);
+    }
+</style>
+</html>

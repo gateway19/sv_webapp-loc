@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Зарегистрироваться</title>
+</head>
+<body>
+    <header>
+        <a href="login">Войти</a>
+    </header>
+    <div class="form">
+        <input id="firstname" required placeholder="Фамилия"/>
+        <input id="name" required placeholder="Имя"/>
+        <input id="patronymic" required placeholder="Отчетство(При наличии)"/>
+        <input id="group" required placeholder="Группа"/>
+        <input id="gender" required placeholder="Пол"/>
+        <input id="login" required placeholder="Логин"/>
+        <input id="password" required type=""password placeholder="Пароль"/>
+        <button onclick="register()">Зарегистрироваться</button>
+    </div>
+</body>
+<style>
+    header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+    a {
+        border: 1px solid black;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    a:hover {
+        background-color: gray;
+    }
+
+    .form {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+    }
+    input {
+        border: 1px solid black;
+        padding-inline:  50px;
+        padding-block: 10px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    button {
+        border: 1px solid black;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    button:hover {
+        background-color: gray;
+        
+    }
+</style>
+<script>
+    async function register() {
+        let firstname = document.getElementById("firstname").value;
+        let name = document.getElementById("name").value;
+        let patronymic = document.getElementById("patronymic").value;
+        let group = document.getElementById("group").value;
+        let gender = document.getElementById("gender").value;
+        let login = document.getElementById("login").value;
+        let password = document.getElementById("password").value;
+
+        let promise = await fetch("/register", {
+            method: "POST",
+            headers: { "Content-Type" : "application/json"},
+            body: JSON.stringify({ 
+                surname :firstname,
+                firstname :name,
+                patronymic :patronymic,
+                group :group,
+                bio :gender,
+                username :login,
+                password :password
+
+             }),
+        })
+
+        let data = await promise.json();
+        if (data.message != null){
+            alert(data.message)
+        }else{
+        window.location.href = "login";
+    }
+    }
+</script>
+</html>

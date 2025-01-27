@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Личный кабинет</title>
+</head>
+<body>
+    <header>
+        <h1>Личный кабинет багнутого сервиса </h1>
+        <a href="users.html">К списку друзей</a>
+    </header>
+    <div id="account" class="account">     
+    </div>
+</body>
+<style>
+    header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+    a {
+        border: 1px solid black;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    a:hover {
+        background-color: gray;
+    }
+
+    .account {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+    }
+
+    .info {
+        width: 100px;
+        font-size: large;
+    }
+</style>
+<script>
+    if(sessionStorage.getItem("token") == null){
+        window.location.href = "login";}
+    let account = document.getElementById("account");
+    GetAccount();
+
+    async function GetAccount() {
+        let promise = await fetch("/account", {
+                headers : { "Authorization" : sessionStorage.getItem("token")}
+            })
+        let accountInfo = await promise.json();
+        account.innerHTML = `
+            <div class="info">Фамилия: ${accountInfo.surname}</div>
+            <div class="info">Имя: ${accountInfo.name}</div>
+            <div class="info">Отчество: ${accountInfo.patronymic}</div>
+            <div class="info">Группа: ${accountInfo.group}</div>
+            <div class="info">Логин: ${accountInfo.login}</div>
+            <div class="info">Пол: ${accountInfo.bio}</div>
+        `
+    }
+
+</script>
+</html>
