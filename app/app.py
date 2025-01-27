@@ -3,6 +3,7 @@ from fastapi.responses import FileResponse, RedirectResponse
 from fastapi_auth_jwt import JWTAuthBackend, JWTAuthenticationMiddleware
 from app.config import User, AuthenticationSettings
 from app.schemas import RegisterSchema, LoginSchema
+
 auth_backend = JWTAuthBackend(
     authentication_config=AuthenticationSettings(),
     user_schema=User,
@@ -40,21 +41,21 @@ async def sign_up(request_data: RegisterSchema):
 
 @app.post("/login")
 async def login(request_data: LoginSchema):
-    if any([i.username == request_data.username and i.password == request_data.password for i in Nedo_db]):
-        token = await auth_backend.create_token(
-            {
-                "username": request_data.username,
-            }
-        )
-        return {"token": f"{token}"}
-    else:return{"message":"Invalid pass or login"}
+    if not any([i.username == request_data.username and i.password == request_data.password for i in Nedo_db]):
+        return{"message":"Invalid pass or login"}
+    token = await auth_backend.create_token(
+        {
+            "username": request_data.username,
+        }
+    )
+    return {"token": f"{token}"}
 
 
-@app.get("/account") # Проблема в либе ( в request.state 50/50 есть-нету user class)
+@app.get("/account") # Проблема в либе ( в request.state нету user class ) Решение в процессе
 async def get_profile_info(request: Request):
-    user: User = request.state.user.username # tried => # user = request.state.user.username # user = request.state.username
+    user: User = request.state.user # tried=> # user = request.state.user.username # user = request.state.username
     for i in Nedo_db:
-        if i.username == user:
+        if i.username == user.username:
             return {
                 "surname" : i.surname,
                 "firstname" : i.firstname,
