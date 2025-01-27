@@ -9,6 +9,7 @@ class RegisterSchema(BaseModel):
     surname : str
     firstname : str
     patronymic: str
+    group:str
     bio: str
     username: str
     password: str
