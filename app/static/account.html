@@ -53,10 +53,10 @@
         let accountInfo = await promise.json();
         account.innerHTML = `
             <div class="info">Фамилия: ${accountInfo.surname}</div>
-            <div class="info">Имя: ${accountInfo.name}</div>
+            <div class="info">Имя: ${accountInfo.firstname}</div>
             <div class="info">Отчество: ${accountInfo.patronymic}</div>
             <div class="info">Группа: ${accountInfo.group}</div>
-            <div class="info">Логин: ${accountInfo.login}</div>
+            <div class="info">Логин: ${accountInfo.username}</div>
             <div class="info">Пол: ${accountInfo.bio}</div>
         `
     }

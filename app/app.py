@@ -65,9 +65,14 @@ async def get_profile_info(request: Request):
     
     # unsafe_fix
     jsonfromtoken= str( base64.b64decode(request.headers.get("Authorization").replace("Bearer","").split(".")[1])  ,encoding='utf-8')
-    user=json.loads(jsonfromtoken)
+    print(jsonfromtoken)
+    try:
+        user=json.loads(jsonfromtoken)["username"]
+    except Exception as e:
+        print(e)
+        user="ночь-без-сна"
     for i in Nedo_db:
-        if i.username == user.username:
+        if i.username == user:
             return {
                 "surname" : i.surname,
                 "firstname" : i.firstname,
