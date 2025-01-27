@@ -1,3 +1,5 @@
+import base64
+import json
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi_auth_jwt import JWTAuthBackend, JWTAuthenticationMiddleware
@@ -51,9 +53,19 @@ async def login(request_data: LoginSchema):
     return {"token": f"{token}"}
 
 
-@app.get("/account") # Проблема в либе ( в request.state нету user class ) Решение в процессе
+@app.get("/account") 
 async def get_profile_info(request: Request):
-    user: User = request.state.user # tried=> # user = request.state.user.username # user = request.state.username
+    #    # Проблема в либе ( в request.state нету user class ) 
+    print(vars(request.state),dir(request.state),type(request.state),"\n")
+    # Проверены=> 
+    # # user = request.state.user 
+    # # user = request.state.username 
+    # # user = request.state
+    # user: User = "request.state.user" 
+    
+    # unsafe_fix
+    jsonfromtoken= str( base64.b64decode(request.headers.get("Authorization").replace("Bearer","").split(".")[1])  ,encoding='utf-8')
+    user=json.loads(jsonfromtoken)
     for i in Nedo_db:
         if i.username == user.username:
             return {
